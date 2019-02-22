@@ -18,12 +18,13 @@ parser.add_argument("--starttime", help="Start time for filter time range. Forma
         Required when specifying endtime")
 parser.add_argument("--endtime", help="End time for filter time range. Format default YYYYMMDD. \
         Required when specifying starttime")
-parser.add_argument("--dateformat", help=textwrap.dedent('''Format to use when specifying timestamps ex: 'yyyy-mm-dd HH:mm'. 
-Current supported formats (w example): 
+parser.add_argument("--dateformat", help=textwrap.dedent('''Format for timestamp field in data file. 
+Examples to use: 
     YYYYmmdd - 20190201 (default)
-    YYYY-mm-dd - 20190-2-01
+    YYYY-mm-dd - 2019-02-01
     YYYY-mm-dd HH:mm - 20190-2-01 13:22
-    YYYY-mm-dd HH:mm:ss - 20190-2-01 13:22:33'''))
+    YYYY-mm-dd HH:mm:ss - 20190-2-01 13:22:33
+    milli - 1499489592857 (milliseconds) '''))
 # Store true tells argparse to just store this as a boolean (T/F)
 parser.add_argument("--verbose","-v",help="Verbose mode",action="store_true")
 
@@ -56,9 +57,14 @@ def key_print(line, key, c):
 #       YYYY-mm-dd - %Y-%m-%d
 #       YYYY-mm-dd HH:mm
 #       YYYY-mm-dd HH:mm:ss
+#       milli  - millisecond value - 1499489592857
 ##
 def within_range(adate,starttime,endtime,aformat):
-    the_date = datetime.strptime(adate,'%Y-%m-%d %H:%M')
+    if aformat == "milli":
+        adate = datetime.fromtimestamp(float(adate)/1000).strftime('%Y-%m-%d %H:%M')
+        aformat = '%Y-%m-%d %H:%M'
+    ##! need to use regexs here to know the format 
+    the_date = datetime.strptime(adate,aformat)
     st_dt = datetime.strptime(starttime,aformat)
     en_dt = datetime.strptime(endtime,aformat)
     if the_date >= st_dt and the_date <= en_dt:
@@ -95,11 +101,13 @@ with open(args.file) as f:
             if int(line[c-1]) >= the_range[0] and \
                int(line[c-1]) <= the_range[1]:
                 print ",".join(line)
+        ##! Add option to print date in human readable (milli)
         elif args.starttime:
             # Column needs to be set correctly. 
             # Search based on time range
             if within_range(line[c-1],args.starttime,args.endtime,d_format):
                 print ",".join(line)
+                ## print get_human_date...
             else:
                 if args.verbose:
                     print "DATE OUTSIDE:",",".join(line)
