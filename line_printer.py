@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-# Just a tester app
-
 import argparse, csv
 from datetime import datetime
 # Used this to allow newlies in help text (dateformat)
