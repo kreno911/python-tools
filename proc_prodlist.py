@@ -7,7 +7,6 @@ import openpyxl
 #           --orig special-8-27-19.xlsx > final_results.csv
 # Terminal: View->Tool Windows->Terminal
 # Running on windows:
-#  \python\Python27\python.exe proc_prodlist.py --bowfile <file>.xlsx > 9_13.csv
 #  \python\Python27\python.exe proc_prodlist.py --orig shepher-9_13.xlsx
 #                                               --results shepher-9_13-result.xlsx
 #       --shtname Inventory
@@ -90,22 +89,17 @@ def processExcelForBow(sheet):
         upc_fixed = "%012d" % int(upc)
         print "%s,%s" % (price,upc_fixed)
 
-bow_file = "none"
 original_file = "none"
 sheet_name = "Inventory"
 length = len(sys.argv)
 if length < 2:
-    print "options: --bowfile <xlsx> |--shtname <sheet nm>|--orig <xlsx>|--results <xlsx>"
-    print "--bowfile will only produce upload file, UPC/price for processing"
+    print "--shtname <sheet nm>|--orig <xlsx>|--results <xlsx>"
     print "provide both orig/results together"
     print "--shtname is for sheets that are different than default."
-    print "--orig would be same file as given in bowfile option"
+    print "--orig is the original xlsx file"
     sys.exit(11)
 else:
     for v in range(1, length):
-        # Export for Bow's tool (price,upc)
-        if sys.argv[v] == "--bowfile":
-            bow_file = sys.argv[v+1]
         if sys.argv[v] == "--shtname":
             sheet_name = sys.argv[v+1]
         # original file we grab UPC/Supplier SKUs
@@ -113,12 +107,6 @@ else:
             original_file = sys.argv[v+1]
         if sys.argv[v] == "--results":
             results_file = sys.argv[v+1]
-
-if bow_file != "none":
-    wb = openpyxl.load_workbook(bow_file)
-    bow_sheet = wb.get_sheet_by_name(sheet_name)
-    processExcelForBow(bow_sheet)
-    sys.exit(0)
 
 if original_file != "none" and results_file != "none":
     wb = openpyxl.load_workbook(original_file)
