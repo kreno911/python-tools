@@ -41,6 +41,9 @@ else:
             bow_file = sys.argv[v+1]
 
 if bow_file != "none":
+    if not os.path.exists(bow_file):
+        print "File %s does not exist." % bow_file
+        sys.exit(11)
     wb = openpyxl.load_workbook(bow_file)
     bow_sheet = wb.get_sheet_by_name(sheet_name)
     processExcelForBow(bow_sheet)
