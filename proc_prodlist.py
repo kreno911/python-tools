@@ -65,29 +65,6 @@ def processCombined(result_sheet, orig_sheet):
         # Need to remove spacial characters in description
         amz_desc = re.sub('[^A-Za-z0-9]+', ' ', amz_desc)
         print "%s,%s,%s,%s,%s" % (asin,upc,suppl_code,price,amz_desc)
-######################################
-# This will create the initial csv file to feed into the analyzer
-######################################
-def processExcelForBow(sheet):
-    print "Base Price,UPC Code"
-    for row in range(2, sheet.max_row + 1):
-        # Base price could be different
-        #price = sheet['D'+str (row)].value
-        price = sheet['E' + str(row)].value
-        if price is None:
-            continue
-        #upc = sheet['F'+str(row)].value
-        #upc = sheet['G' + str(row)].value
-        # Error correction like above
-        upc = str(sheet['G' + str(row)].value)
-        if upc == "None" or upc == "- None -" or "'" in upc:
-            continue
-        # Some upc's come in format: 26608001249.0, strip any decimals
-        if "." in upc:
-            print "Found: ", upc
-            upc = upc.split(".")[0]
-        upc_fixed = "%012d" % int(upc)
-        print "%s,%s" % (price,upc_fixed)
 
 original_file = "none"
 sheet_name = "Inventory"
