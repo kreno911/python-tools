@@ -14,4 +14,7 @@ Note all python scripts should follow these rules:
    can be in separate files. 
 4) All test files for each section must go into testdir# dirs
 5) All print statements must be enclosed with ()
+6) All functions that create/delete something should do the opposite
+    ie: if you delete a file, re-create it after deletion...
+7) Catch ALL errors where it makes sense. Always crash gracefully.
 

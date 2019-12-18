@@ -18,8 +18,7 @@ def test_formats():
     # Formats:
     #   %Y - 4 digit year, %y - 2 digit year, %H - 24 hour hour (00-23)
     #   %I - 12 hour clock (01-12), %d day of month (01-31) 
-    #   https://www.tutorialspoint.com/python/time_strptime.htm
-    # Basic tests
+    #   https://www.tutorialspoint.com/python/time_strftime.htm
     today = datetime.now().strftime('%Y%m%d')
     year = datetime.now().strftime('%Y')
     month = datetime.now().strftime('%m')
@@ -34,6 +33,7 @@ def test_formats():
         % (today, current_hour, yesterday, last_hour, myDate))
     print("When printing .now() you get this format by default: '2018-05-21 13:13:29.829391'")
 
+    #   https://www.tutorialspoint.com/python/time_strptime.htm
     print("Convert string to date with format...YYYYMMDDHHMM (199911170500) with strptime")
     str = "199911170500"
     dt = datetime.strptime("199911170500", "%Y%m%d%H%M")
