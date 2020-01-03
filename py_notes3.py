@@ -37,7 +37,7 @@ def test_formats():
     print("Convert string to date with format...YYYYMMDDHHMM (199911170500) with strptime")
     str = "199911170500"
     dt = datetime.strptime("199911170500", "%Y%m%d%H%M")
-    print "199911170500 converted: ", dt
+    print("199911170500 converted: ", dt)
 
 
 test_formats()
