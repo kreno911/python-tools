@@ -8,7 +8,7 @@ import openpyxl
 # This will create the initial csv file to feed into the analyzer
 ######################################
 def processExcelForBow(sheet):
-    print "Base Price,UPC Code"
+    print("Base Price,UPC Code")
     for row in range(2, sheet.max_row + 1):
         # Base price could be different
         #price = sheet['D'+str (row)].value
@@ -23,16 +23,16 @@ def processExcelForBow(sheet):
             continue
         # Some upc's come in format: 26608001249.0, strip any decimals
         if "." in upc:
-            print "Found: ", upc
+            print("Found: ", upc)
             upc = upc.split(".")[0]
         upc_fixed = "%012d" % int(upc)
-        print "%s,%s" % (price,upc_fixed)
+        print("%s,%s" % (price,upc_fixed))
 
 bow_file = "none"
-sheet_name = "Inventory"
+sheet_name = "Inv" # "Inventory"
 length = len(sys.argv)
 if length < 2:
-    print "options: --bowfile <xlsx>"
+    print("options: --bowfile <xlsx>")
     sys.exit(11)
 else:
     for v in range(1, length):
@@ -42,7 +42,7 @@ else:
 
 if bow_file != "none":
     if not os.path.exists(bow_file):
-        print "File %s does not exist." % bow_file
+        print("File %s does not exist." % bow_file)
         sys.exit(11)
     wb = openpyxl.load_workbook(bow_file)
     bow_sheet = wb.get_sheet_by_name(sheet_name)

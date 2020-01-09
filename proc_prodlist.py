@@ -28,7 +28,7 @@ def getUPCtoSKUMap(sheet, upc_row, brand_sku_row):
         # any I added '0' to front matched a leading zero check
         # First exported whole UPC row to CSV
         #if str(upc_fixed)[0] == "0":
-            #print upc_fixed
+            #print(upc_fixed
         upc_fixed = "%012d" % int(upc)
         sku = sheet[brand_sku_row+str(row)].value
         data[upc_fixed] = sku
@@ -43,7 +43,7 @@ def getUPCtoSKUMap(sheet, upc_row, brand_sku_row):
 #   ASIN/Profit/Amz title
 ######################################
 def processCombined(result_sheet, orig_sheet):
-    print "ASIN,UPC,SupplierSku,Price,AmzDescription"
+    print("ASIN,UPC,SupplierSku,Price,AmzDescription")
     # UPC,SKU
     #data = getUPCtoSKUMap(orig_sheet, 'F', 'A')  # Special
     data = getUPCtoSKUMap(orig_sheet, 'G', 'B')
@@ -60,20 +60,20 @@ def processCombined(result_sheet, orig_sheet):
         if upc in data:
             suppl_code = data[upc]
         if suppl_code == "none":
-            print "Supplier code is NONE!!!! [%s] (Check data assignment)" % upc
+            print("Supplier code is NONE!!!! [%s] (Check data assignment)" % upc)
             sys.exit(13)
         # Need to remove spacial characters in description
         amz_desc = re.sub('[^A-Za-z0-9]+', ' ', amz_desc)
-        print "%s,%s,%s,%s,%s" % (asin,upc,suppl_code,price,amz_desc)
+        print("%s,%s,%s,%s,%s" % (asin,upc,suppl_code,price,amz_desc))
 
 original_file = "none"
 sheet_name = "Inventory"
 length = len(sys.argv)
 if length < 2:
-    print "--shtname <sheet nm>|--orig <xlsx>|--results <xlsx>"
-    print "provide both orig/results together"
-    print "--shtname is for sheets that are different than default."
-    print "--orig is the original xlsx file"
+    print("--shtname <sheet nm>|--orig <xlsx>|--results <xlsx>")
+    print("provide both orig/results together")
+    print("--shtname is for sheets that are different than default.")
+    print("--orig is the original xlsx file")
     sys.exit(11)
 else:
     for v in range(1, length):
