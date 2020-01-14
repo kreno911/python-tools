@@ -1,7 +1,7 @@
 
 ####################################
-#   This is the second part dealing with more advanced
-#   use of the basics.
+#   This is the third part dealing with more advanced
+#   use.
 #
 #   The focus here will mostly on dates and times as 
 #   this is what gets most attention on projects.
