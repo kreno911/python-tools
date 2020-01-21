@@ -13,7 +13,7 @@ import os, sys, glob, re, shutil, random
 from datetime import datetime, date, timedelta
 import time
 
-def test_formats():
+def test_date_formats():
     print("Testing date formats...")
     # Formats:
     #   %Y - 4 digit year, %y - 2 digit year, %H - 24 hour hour (00-23)
@@ -73,6 +73,6 @@ def testCollections():
     d[2] = "java"
     print("Value not in dict is: %s, %d" % (d[3],d[3]))  # prints 0
 
-#test_formats()
+#test_date_formats()
 
 testCollections()

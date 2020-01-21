@@ -88,10 +88,17 @@ def create_dirs_and_files():
 def testOsFunctions():
     print("Testing OS functions...")
     create_dirs_and_files()
+
+    # Test out splittext
+    (drive, tail) = os.path.splitext("/projects/python/work/errors.txt")
+    # Print out the full path up to extension and the extension 
+    # Two ..text will leave a '.' in each value
+    print("splitext: %s Tail: %s" % (drive, tail))
 ####
 # Greedy - will make the largest capture of data 
 # 
 def testRegexFunctions():
+    print("TESTING %s functions." % "Regex")
     a_string = "I contain 123 and 456 and 7 and 99"
     print ("Trying to find all numbers in %s" % a_string)
     # Find all consecutive #s
@@ -119,7 +126,10 @@ def testSysFunctions():
 def testGlobFunctions():
     pass
 def testStringFunctions():
-    pass
+    print("TESTING %s functions." % "STRING")
+    # zfill function
+    zfill_string = "fill me in"
+    print("%s : (15 total characters front-padding with 0s) " % (zfill_string.zfill(15)))
 def testShutilFunctions():
     pass
 def testRandomFunctions():
