@@ -2,8 +2,10 @@
 from datetime import datetime
 import os, re, stat, time
 
-# Important links
+# Important links/info
 #   https://www.techbeamers.com/python-time-functions-usage-examples/#time-time-function
+#   datetime.strptime returns datetime.datetime (2016-10-10 10:00:00)
+#   os.path.getmtime returns float (1513777689.66)
 
 ####
 # Check if first file is older than second.
@@ -60,13 +62,17 @@ def get_age_of_file(file, unit="M"):
     # Minutes
     return int((time.time() - os.stat(file)[stat.ST_MTIME])/60)
 ####
-# Return all file that are older given date.
-# Param 1: Date in format
+# Return all files that are older given date from given list.
+# Param 1: Date in format: "%Y-%m-%d %H:%M:%S", ex: 2019-10-25 14:30:00"
 # Param 2: List of files with absolute paths
-# Returns: List of strings of file paths
+# Returns: List of strings of file paths for files older than date
 ####
 def files_older_than(older_than_date, list_of_files):
+    # convert the date to a time (strptime returns datetime.datetime)
+    files = []
+    timestamp = datetime.strptime(older_than_date, "%Y-%m-%d %H:%M:%S")
+    epoch_seconds = (timestamp-datetime(1970, 1, 1)).total_seconds()
     for filename in list_of_files:
-        if os.path.getmtime(os.path.join(os.path, filename)) < now - 7 * 86400:
-            if os.path.isfile(os.path.join(os.path, filename)):
-                print("%s is older than %s" % (this_file,filename))
+        if int(os.path.getmtime(filename)) < epoch_seconds:
+            files.append(filename)
+    return files
