@@ -22,10 +22,6 @@ If statements:
 Spatial stuff: OGR - for vector data
                GDAL - for raster data (deprecated)
 
- Use xrange instead of range for large values. range will try to create memory allocation for all values before executing the loop while xrange does not.
- -----------
- Using cPickle seemed to have reduced time by 50 orders of magnitude in some cases.
- -----------
  Local vs. global functions:
  Make a local pointer to the global function. If being called million times, its a little faster.
    lmax = max
@@ -66,6 +62,14 @@ throw exception x but you dont care in this case.
 '''
 import os, sys, glob, re, shutil, random
 
+# Basic stuff that does not fit anywhere
+def testBasics():
+    # Use underscore for large numbers with ','
+    number = 1_000_000
+    print("large number 1_000_000 is %d" % number)
+    # Other printing options
+    print("Large number using f'{number}'", f'{number}')
+    
 # Function goes with testOsFunctions to show how to create/delete
 # list files and dirs.
 # Creates the following structure:
@@ -139,15 +143,26 @@ def testEnv():
 def testArgs():
     pass
 def testArrays():
-    pass
+    print("Testing arrays...")
+    print("Capture first two values of an array and default the rest")
+    a,b,*c = (1,2,3,4,5,6)
+    print("a,b,*c = (1,2,3,4,5,6) =>")
+    print("   a=",a,"b=",b,"c=",c)
 def testSets():
     pass
 def testDictionaries():
     pass
+def testFiles():
+    # Always make use of context managers.
+    # Context managers eliminate the need for close().
+    # Also use these for threads and database connections
+    with open("somefile_to_write_to", 'w') as wr_file:
+        wr_file.write("Something...")
 
 '''
 Block out...
 '''
+testBasics()
 testOsFunctions()
 testSysFunctions()
 testGlobFunctions()
