@@ -2,10 +2,14 @@ import csv, sys, os, re
 # Excel xlsx processing
 import openpyxl
 
-# proc_prodlist.py --input <file>.xlsx > 9_13.csv
+# create_bcr_file.py --input <file>.xlsx > 9_13.csv
+# create_bcr_file.py --input <file>.xlsx --sheets (to get sheet names)
 
 ######################################
 # This will create the initial csv file to feed into the analyzer
+# This will print out price,UPC with header: Base Price,UPC Code 
+#    - redirect these to a .csv file
+#    - upload to Beaus tool
 ######################################
 def processExcelForBow(sheet):
     print("Base Price,UPC Code")
@@ -23,7 +27,7 @@ def processExcelForBow(sheet):
             continue
         # Some upc's come in format: 26608001249.0, strip any decimals
         if "." in upc:
-            print("Found: ", upc)
+            #print("Found: ", upc)
             upc = upc.split(".")[0]
         upc_fixed = "%012d" % int(upc)
         print("%s,%s" % (price,upc_fixed))
