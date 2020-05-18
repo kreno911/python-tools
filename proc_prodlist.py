@@ -9,7 +9,11 @@ import openpyxl
 # Running on windows:
 #  \python\Python27\python.exe proc_prodlist.py --orig shepher-9_13.xlsx
 #                                               --results shepher-9_13-result.xlsx
-#       --shtname Inventory
+#                                               --shtname Inventory
+
+# If you see: 
+#   ValueError: invalid literal for int() with base 10: '715471200010.0'
+#   Go to the original spreadsheet (xlsx) and format UPC column to number, 0 decimals
 
 ######################################
 # Return a map of UPC to Brand name SKU
@@ -70,9 +74,10 @@ original_file = "none"
 sheet_name = "Inventory"
 length = len(sys.argv)
 if length < 2:
+    print("\nUse this to generate a cross list of product UPCs to ASINs to supplier codes")
     print("--shtname <sheet nm>|--orig <xlsx>|--results <xlsx>")
     print("provide both orig/results together")
-    print("--shtname is for sheets that are different than default.")
+    print("--shtname is for sheets that are different than default. (Inventory)")
     print("--orig is the original xlsx file")
     sys.exit(11)
 else:
@@ -87,8 +92,8 @@ else:
 
 if original_file != "none" and results_file != "none":
     wb = openpyxl.load_workbook(original_file)
-    orig_sheet = wb.get_sheet_by_name(sheet_name)
+    orig_sheet = wb.active  
     wb2 = openpyxl.load_workbook(results_file)
-    result_sheet = wb2.get_sheet_by_name("Worksheet")
+    result_sheet = wb2.active 
     processCombined(result_sheet, orig_sheet)
 
