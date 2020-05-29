@@ -1,6 +1,7 @@
 import csv, sys, os, re
 # Excel xlsx processing
 import openpyxl
+from mypylib import contains_char
 
 # create_bcr_file.py --input <file>.xlsx > 9_13.csv
 # create_bcr_file.py --input <file>.xlsx --sheets (to get sheet names)
@@ -34,18 +35,6 @@ def processExcelForBow(sheet):
             upc = upc.split(".")[0]
         upc_fixed = "%012d" % int(upc)
         print("%s,%s" % (price,upc_fixed))
-
-#############
-# Return whether this string contains a character.
-# Param: some_string - any string of numbers/characters
-# Returns boolean True if this string contains a character
-#############
-def contains_char(some_string):
-    # '.' are picked up as word chars, so just return true
-    if "." in some_string:
-        return False
-    chars = re.compile('\w')
-    return bool(chars.search(some_string))
 
 bow_file = "none"
 sheet_name = "Inventory"

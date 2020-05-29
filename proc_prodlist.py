@@ -2,6 +2,7 @@
 import csv, sys, os, re
 # Excel xlsx processing 
 import openpyxl
+from mypylib import contains_char
 
 # Run as: proc_prodlist.py --results 8_27-special_results.xlsx
 #           --orig special-8-27-19.xlsx > final_results.csv
@@ -16,14 +17,20 @@ import openpyxl
 #   Go to the original spreadsheet (xlsx) and format UPC column to number, 0 decimals
 
 ######################################
-# Return a map of UPC to Brand name SKU
+# Return a map of UPC to Brand name SKU (supplier item #)
+# Params:
+#   sheet - the sheet to evaluate
+#   supplier_item_col - column containing the suppliers item #
 ######################################
-def getUPCtoSKUMap(sheet, upc_row, brand_sku_row):
+def getUPCtoSKUMap(sheet, supplier_item_col):
     data = {}
     # Start at row 2 to skip header
     for row in range(2, sheet.max_row + 1):
-        upc = str(sheet[upc_row + str(row)].value)
-        if upc == "None" or upc == "- None -" or "'" in upc:
+        upc = str(sheet[upc_column + str(row)].value)
+        # ACDitro has UPCs with characters
+        containsChar = contains_char(upc)
+        if upc == "None" or upc == "- None -" or "'" in upc or containsChar:
+            #print("skip: " + upc)
             continue
         # UPC fields that start with 0 are truncated
         # so 033 will be 33 which is wrong
@@ -34,7 +41,7 @@ def getUPCtoSKUMap(sheet, upc_row, brand_sku_row):
         #if str(upc_fixed)[0] == "0":
             #print(upc_fixed
         upc_fixed = "%012d" % int(upc)
-        sku = sheet[brand_sku_row+str(row)].value
+        sku = sheet[supplier_item_col+str(row)].value
         data[upc_fixed] = sku
     return data
 
@@ -49,8 +56,7 @@ def getUPCtoSKUMap(sheet, upc_row, brand_sku_row):
 def processCombined(result_sheet, orig_sheet):
     print("ASIN,UPC,SupplierSku,Price,AmzDescription")
     # UPC,SKU
-    #data = getUPCtoSKUMap(orig_sheet, 'F', 'A')  # Special
-    data = getUPCtoSKUMap(orig_sheet, 'G', 'B')
+    data = getUPCtoSKUMap(orig_sheet, supplier_item_col)
     for row in range(2, result_sheet.max_row + 1):
         price = result_sheet['E'+str(row)].value
         if price is None:
@@ -72,6 +78,8 @@ def processCombined(result_sheet, orig_sheet):
 
 original_file = "none"
 sheet_name = "Inventory"
+upc_column = 'G'
+supplier_item_col = 'B'
 length = len(sys.argv)
 if length < 2:
     print("\nUse this to generate a cross list of product UPCs to ASINs to supplier codes")
@@ -89,6 +97,10 @@ else:
             original_file = sys.argv[v+1]
         if sys.argv[v] == "--results":
             results_file = sys.argv[v+1]
+        if sys.argv[v] == "--upccol":
+            upc_column = sys.argv[v+1]
+        if sys.argv[v] == "--supitemcol":
+            supplier_item_col = sys.argv[v+1]
 
 if original_file != "none" and results_file != "none":
     wb = openpyxl.load_workbook(original_file)

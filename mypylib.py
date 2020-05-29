@@ -76,3 +76,15 @@ def files_older_than(older_than_date, list_of_files):
         if int(os.path.getmtime(filename)) < epoch_seconds:
             files.append(filename)
     return files
+
+#############
+# Return whether this string contains a character (ignore periods).
+# Param: some_string - any string of numbers/characters
+# Returns boolean True if this string contains a character
+#############
+def contains_char(some_string):
+    # '.' are picked up as word chars, so just return true
+    if "." in some_string:
+        return False
+    chars = re.compile('\D')  # non-digit 
+    return bool(chars.search(some_string))
