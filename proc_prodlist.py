@@ -17,10 +17,14 @@ from mypylib import contains_char
 #   Go to the original spreadsheet (xlsx) and format UPC column to number, 0 decimals
 
 ######################################
-# Return a map of UPC to Brand name SKU (supplier item #)
+# Return a map of UPC to supplier item #
 # Params:
 #   sheet - the sheet to evaluate
 #   supplier_item_col - column containing the suppliers item #
+# Return example (map):
+#   { '722626008276': 'BCDDGM80GRY', 
+#     '722626007477': 'BCDDGM80ORG' 
+#   }
 ######################################
 def getUPCtoSKUMap(sheet, supplier_item_col):
     data = {}
@@ -47,6 +51,7 @@ def getUPCtoSKUMap(sheet, supplier_item_col):
 
 ######################################
 # This will create a master list containing ASIN/UPC/Supplier SKU
+# from the original and results spreadsheet. 
 # Results file will usually be smaller (less rows) than original
 # Original contains:
 #   UPC/Supplier Sku/Supplier Desc

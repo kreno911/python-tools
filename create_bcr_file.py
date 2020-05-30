@@ -17,6 +17,13 @@ from mypylib import contains_char
 def processExcelForBow(sheet):
     print("Base Price,UPC Code")
     for row in range(2, sheet.max_row + 1):
+        # Make sure quantity is > 0
+        quantity = sheet[quantity_col + str(row)].value
+        if check_quantity:
+            if '+' in str(quantity):  # Schepher thing '1800+'
+                break
+            if quantity == "None" or int(quantity) <= 0:
+                continue
         # Base price could be different
         #price = sheet['D'+str (row)].value
         price = sheet[price_column + str(row)].value
@@ -40,14 +47,17 @@ bow_file = "none"
 sheet_name = "Inventory"
 show_sheets = False
 # Default columns 
+quantity_col = 'A'   # Shepher 
+check_quantity = False
 upc_column = 'G'
 price_column = 'E'
 length = len(sys.argv)
 if length < 2:
     print("Options: --input <xlsx> [--sheetname <sheet>|--sheets]")
     print("Option --sheets will print sheet names and exit.")
-    print("       --upccol # -> UPC column (default is G)")
-    print("       --pricecol # -> Price column (default is E)")
+    print("       --upccol <char> -> UPC column (default is 'G')")
+    print("       --pricecol <char> Price column (default is 'E')")
+    print("       --quantity-col <char> (default is 'A')")
     print("Sheet name default is %s" % sheet_name)
     sys.exit(11)
 else:
@@ -63,6 +73,10 @@ else:
             upc_column = sys.argv[v+1]
         if sys.argv[v] == "--pricecol":
             price_column = sys.argv[v+1]
+        # Some spreadsheets come with many 0 quantity columns, filter them 
+        if sys.argv[v] == "--quantity-col":
+            quantity_col = sys.argv[v+1]
+            check_quantity = True
 
 if bow_file != "none":
     if not os.path.exists(bow_file):
