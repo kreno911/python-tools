@@ -13,10 +13,19 @@ import os, sys, glob, re, shutil, random
 from datetime import datetime, date, timedelta
 import time
 
+####
+# One big thing that you may need to do, convert a string to a date
+# that is in one format and return a date or a string of that date
+# in another format. 
+#       Convert string to a date: datetime.strptime
+#       Convert date into string: adate_obj.strftime("format")
+####
 def test_date_formats():
     print("Testing date formats...")
     # Formats:
-    #   %Y - 4 digit year, %y - 2 digit year, %H - 24 hour hour (00-23)
+    #   %Y - 4 digit year, %y - 2 digit year
+    #   %M - minute, %S - second
+    #   %H - 24 hour hour (00-23)
     #   %I - 12 hour clock (01-12), %d day of month (01-31) 
     #   https://www.tutorialspoint.com/python/time_strftime.htm
     today = datetime.now().strftime('%Y%m%d')
