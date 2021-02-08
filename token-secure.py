@@ -34,10 +34,13 @@ if use_prod:
     data_url = prod_data_url
 
 def get_data_with_requests(token_url, data_url):
-    data = {'username': '%s' % user, 'password': '%s' % passw,
-            'client': 'requestip', 'expiration': '60', 'f': 'pjson'}
+    # Changed from client to referer to get past invalid token error 
+    # data = {'username': '%s' % user, 'password': '%s' % passw,
+    #         'client': 'requestip', 'expiration': '60', 'f': 'pjson'}
+    data_r = {'username': '%s' % user, 'password': '%s' % passw,
+            'referer': 'localhost', 'expiration': '60', 'f': 'pjson'}
     # Setting verify to False will disable cert checking
-    response = requests.post(token_url, data=data, verify=False)
+    response = requests.post(token_url, data=data_r, verify=False)
     tokens = json.loads(response.text)
     the_token = tokens['token']
 
@@ -97,14 +100,16 @@ def get_data_with_urllib(token_url, data_url):
     the_token = tokens['token']
     print("Token: %s" % the_token)
 
+    headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % the_token}
+
 # Get a METAR file
 def get_metar_file():
     metar_file = "https://tgftp.nws.noaa.gov/data/observations/metar/cycles/00Z.TXT"
     file_text = request.urlopen(metar_file).read()
     return file_text
 
-#get_data_with_requests(token_url, data_url)
-get_data_with_urllib(token_url, data_url)
+get_data_with_requests(token_url, data_url)
+#get_data_with_urllib(token_url, data_url)
 
 # SAMPLE DATA RETURN
 '''
