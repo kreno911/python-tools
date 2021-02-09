@@ -14,8 +14,8 @@ def comma(number):
         return "".join(e)
 
 if len(sys.argv) < 1:
-	print "Please enter a number!"
+	print("Please enter a number!")
 	sys.exit(11)
 	
 number = sys.argv[1]
-print comma(number)
+print (comma(number))

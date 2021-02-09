@@ -9,15 +9,14 @@
 #   in lat/long (decimal) to their equivalent lat/long in decimal relative to
 #   to the center (origin).
 #
-# Usage: ./meter_to_latlong.py -p "-1606.89,868.83"
-#                              -o "33.641701553,-84.421684342"
+# Usage: ./meter_to_latlong.py -p "-1606.89,868.83" -o "33.641701553,-84.421684342"
 #
 ################################################################################
 
 import getopt, sys, math
 
 def usage():
-    print "Usage: ./meter_to_latlong.py -p \"mmmm.mm,mmmm,mm\" -o \"mmmm.mm,mmmm,mm\""
+    print ("Usage: ./meter_to_latlong.py -p \"mmmm.mm,mmmm,mm\" -o \"mmmm.mm,mmmm,mm\"")
     sys.exit(9)
 
 ##
@@ -48,23 +47,23 @@ def main(argv):
         opts, args = getopt.getopt(argv, "o:p:")
         # Make sure we have proper args
         if len(argv) < 4:
-            print "Not enough arguments."
+            print ("Not enough arguments.")
             usage()
         for opt, arg in opts:
             if opt in ("-p"):
                 source_pt_m = arg.split(",")
-                print "Source is: %s, %s" % (source_pt_m[0], source_pt_m[1])
+                print ("Source is: %s, %s" % (source_pt_m[0], source_pt_m[1]))
             if opt in ("-o"):
                 ORIGIN = arg.split(",")
-                print "Origin is: %s, %s" % (ORIGIN[0], ORIGIN[1])
-    except getopt.GetoptError, e:
-        print e.msg, "  ", usage()
+                print ("Origin is: %s, %s" % (ORIGIN[0], ORIGIN[1]))
+    except getopt.GetoptError as e:
+        print (e.msg, "  ", usage())
         sys.exit(11)
 
     newPoint = convertToLatLong(source_pt_m[0], source_pt_m[1])
-    print "Point: %s,%s with center %s,%s is:\n(%s,%s)" % \
+    print ("Point: %s,%s with center %s,%s is:\n(%s,%s)" % \
             (source_pt_m[0], source_pt_m[1],ORIGIN[0], ORIGIN[1],\
-             newPoint[0], newPoint[1])
+             newPoint[0], newPoint[1]))
 
 # MAIN
 if __name__ == "__main__":

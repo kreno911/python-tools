@@ -67,7 +67,7 @@ def get_range_tuple(arange):
 def key_print(line, key, c):
     if key:
         if line[c-1].upper() == key.upper():
-            print ",".join(line)
+            print (",".join(line))
             return True
     return False
 ##
@@ -104,16 +104,16 @@ if args.intrange:
     the_range = get_range_tuple(args.intrange)
     if the_range[0] == -1:
         parser.error("Your range is incorrect. X must be less than Y for example")
-#    print "Your range is %d to %d" % (the_range[0],the_range[1])
+#    print ("Your range is %d to %d" % (the_range[0],the_range[1]))
 #if args.col and args.key:
-#    print "You are filtering col %d on key %s" % (args.col,args.key)
+#    print ("You are filtering col %d on key %s" % (args.col,args.key))
 #elif args.col:
-#    print "Using column %d" % args.col
+#    print ("Using column %d" % args.col)
 if (args.starttime is None and args.endtime) and \
    (args.endtime is None and args.starttime):
     parser.error("start and end times are needed together.")
 if args.dateformat:
-#    print "Date format %s" % args.dateformat
+#    print ("Date format %s" % args.dateformat)
     d_format = args.dateformat
 else:
     d_format = "%Y%m%d"
@@ -130,17 +130,17 @@ with open(args.file) as f:
         if args.intrange:
             if int(line[c-1]) >= the_range[0] and \
                int(line[c-1]) <= the_range[1]:
-                print ",".join(line)
+                print (",".join(line))
         ##! Add option to print date in human readable (milli)
         elif args.starttime:
             # Column needs to be set correctly. 
             # Search based on time range
             if within_date_range(line[c-1],args.starttime,args.endtime,d_format):
-                print ",".join(line)
+                print (",".join(line))
                 ## print get_human_date...
         elif args.key:
             key_print(line, args.key, c)
         # Just print the line
         else:
-            print ",".join(line)
+            print (",".join(line))
 
