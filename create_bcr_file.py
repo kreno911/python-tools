@@ -33,7 +33,7 @@ def processExcelForBow(sheet):
         upc = str(sheet[upc_column + str(row)].value)
         # ACDitro has UPCs with characters
         containsChar = contains_char(upc)
-        if upc == "None" or upc == "- None -" or "'" in upc or containsChar:
+        if upc == "None" or upc == "- None -" or "'" in upc or containsChar or upc == "":
             #print("skip: " + upc)
             continue
         # Some upc's come in format: 26608001249.0, strip any decimals
