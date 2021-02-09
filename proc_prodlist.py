@@ -33,7 +33,7 @@ def getUPCtoSKUMap(sheet, supplier_item_col):
         upc = str(sheet[upc_column + str(row)].value)
         # ACDitro has UPCs with characters
         containsChar = contains_char(upc)
-        if upc == "None" or upc == "- None -" or "'" in upc or containsChar:
+        if upc == "None" or upc == "- None -" or "'" in upc or containsChar or upc == "":
             #print("skip: " + upc)
             continue
         # UPC fields that start with 0 are truncated
