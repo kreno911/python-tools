@@ -5,6 +5,23 @@
 #
 #   The focus here will mostly on dates and times as 
 #   this is what gets most attention on projects.
+#
+#   WORKING EXAMPLES (for specific uses of these functions)
+#       - For pykml look for surfaces_kml_to_gjson.py in work to see a basic use 
+#         where I convert a KML file back into GEO Json.
+#         Also has - map/dictionary
+#
+# URLLIB2
+#   response = urllib2.urlopen('...')
+#   response.getcode() - HTTP response code
+#   response.geturl()  - URL used by request
+#   response.info()    - Header info along with URL (connection status)
+
+# Python modules (with functions only - no classes):
+#   1) create your lib (mylib.py)
+#   2) If in same directory as your calling files, just "import mylib"
+#   3) If in a subdirectory, "from subdir import mylib"
+#
 ####################################
 
 # Include standard libs
@@ -46,7 +63,7 @@ def test_date_formats():
     print("Convert string to date with format...YYYYMMDDHHMM (199911170500) with strptime")
     str = "199911170500"
     dt = datetime.strptime("199911170500", "%Y%m%d%H%M")
-    print "199911170500 converted: ", dt
+    print("199911170500 converted: ", dt)
 
 def testCollections():
     # Other new imports
@@ -82,6 +99,20 @@ def testCollections():
     d[2] = "java"
     print("Value not in dict is: %s, %d" % (d[3],d[3]))  # prints 0
 
-#test_date_formats()
+# Test out a "dynamic map"
+#   Function that creates a map of values to booleans
+#   used to determine if a particular executable should
+#   be monitored.
+#   This could be expanded to return, say, locations for
+#   a given argument, getExeLocation(exe)...
+def get_check_flag(exe):
+    return {
+        "AGGREGATOR"  : True,
+        "ROTORCRAFT"  : True,
+        "CIWS"        : True
+    }.get(exe, False)   # Return default of False if ! found
 
+#test_date_formats()
+# Boolean: %s - True, %d - 1
+print("Is CIWS there? %s" % (get_check_flag("CIWS")))
 testCollections()
