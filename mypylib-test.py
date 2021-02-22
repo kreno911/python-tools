@@ -59,3 +59,16 @@ class TestMypylib(unittest.TestCase):
         delete_files = files_older_than("2019-02-01 10:00:00", files)
         print("Files: %s" % delete_files)  # Should print all
         self.assertEqual(len(delete_files), 0)
+
+    def testAddressInNetwork():
+        print("Testing addressInNetwork to see if IP is in a network...")
+        # False
+        print("addressInNetwork('188.104.8.64','172.16.0.0','255.240.0.0') = ", \
+                addressInNetwork('188.104.8.64','172.16.0.0','255.240.0.0'))
+        # True
+        print("addressInNetwork('10.9.8.7', '10.9.1.0','255.255.0.0') = ", \
+                addressInNetwork('10.9.8.7', '10.9.1.0','255.255.0.0'))
+        # False
+        print("addressInNetwork('10.9.8.7', '10.9.1.0','255.255.255.0') = ", \
+                addressInNetwork('10.9.8.7', '10.9.1.0','255.255.255.0'))
+

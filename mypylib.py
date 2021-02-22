@@ -88,3 +88,26 @@ def contains_char(some_string):
         return False
     chars = re.compile('\D')  # non-digit 
     return bool(chars.search(some_string))
+
+# Check if an ip address is within a given network
+def addressInNetwork(ip,net,mask):
+    '''This function allows you to check if on IP belogs to a Network'''
+    ipaddr = struct.unpack('=L',socket.inet_aton(ip))[0]
+    #netaddr,bits = net.split('/')
+    netmask = struct.unpack('=L',socket.inet_aton(mask))[0]
+    network = struct.unpack('=L',socket.inet_aton(net))[0] & netmask
+    return (ipaddr & netmask) == (network & netmask)
+
+# Check if a file exists
+# Return true/false for fFile
+def check_temp_exists(tfile):
+    if not os.path.isfile(tfile):
+        return False
+    else:
+        return True
+# Test out removal of all vowels from a string except the first character
+# This shows some regular expression advanced trick with negative lookbehind
+def remove_non_initial_vowels(string):
+    # The (?<!^) part of the expression is a negative lookbehind assertion 
+    # that means "not at the beginning of the string".
+    return re.sub('(?<!^)[aeiou]', '', string, flags=re.I)
