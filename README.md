@@ -8,4 +8,3 @@
 - python_import_test.py - run basic imports to check we have what we need to work
 - remove_empty_folders.py - given a directory, '.', remove all empty sub-directories
 
-Add/commit/push from GitBash
