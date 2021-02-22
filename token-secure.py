@@ -34,6 +34,7 @@ data_url = "https://gis-dev.eon.faa.gov/arcgis/rest/services/EON/DRAs/MapServer/
 
 # Set prod if we want production data
 if use_prod:
+    print("Using PROD...")
     token_url = prod_token_url
     data_url = prod_data_url
 
@@ -104,13 +105,13 @@ def get_data_with_requests_paging(token_url, data_url, offset):
     data_all_url = "%s/query?where=1%%3D1&f=pjson&outFields=*&resultRecordCount=5000&resultOffset=%d" \
                                         % (data_url,offset)
     ## (951 count - STL)
-    data_all_url = "%s/query?where=Location%%3D'STL'&f=pjson&outFields=OBJECTID,Region,CreatedDateTime,EventDateTimeUtc&resultRecordCount=3000&resultOffset=%d" \
+    data_all_url = "%s/query?where=Location%%3D'STL'&f=pjson&outFields=*&resultRecordCount=3000&resultOffset=%d" \
                    % (data_url, offset)
     ## Get ALL
-    data_all_url = "%s/query?where=1%%3D1&f=pjson&outFields=OBJECTID,Region,CreatedDateTime,EventDateTimeUtc&resultRecordCount=3000&resultOffset=%d" \
-                   % (data_url, offset)
-    #data_all_url = "%s/query?where=EventDateTimeUtc %%3E CURRENT_TIMESTAMP - INTERVAL '1' DAY&f=pjson&outFields=Region,CreatedDateTime,EventDateTimeUtc,EventType,Summary&resultRecordCount=5000&resultOffset=%d" \
-                    #% (data_url, offset)
+    # data_all_url = "%s/query?where=1%%3D1&f=pjson&outFields=OBJECTID,Region,CreatedDateTime,EventDateTimeUtc&resultRecordCount=3000&resultOffset=%d" \
+    #                % (data_url, offset)
+    # data_all_url = "%s/query?where=EventDateTimeUtc %%3E CURRENT_TIMESTAMP - INTERVAL '1' DAY&f=pjson&outFields=*&resultRecordCount=5000&resultOffset=%d" \
+    #                 % (data_url, offset)
 
     print("get_data_with_requests_paging: %s" % data_all_url)
     response = requests.post(data_all_url, headers=headers, verify=False)
@@ -155,9 +156,9 @@ def get_eon_data(token_url, data_url):
     #         break
     #     print("Value: %s" % value)
     # Write to file
-    with open("outout-all.out", 'w') as wr_file:
+    with open("outout-prod.out", 'w') as wr_file:
         for value in all_the_data:
-            wr_file.write(str(value))
+            wr_file.write(str(value) + '\n')
     print("Count = %d" % len(all_the_data))
 
 def get_data_with_urllib(token_url, data_url):
