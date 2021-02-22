@@ -353,6 +353,21 @@ def testStringFunctions():
     line = "NAME:ACTION"
     print("Split line = ", line.split(":")[1])
 
+    string1 = "I AM A BASIC STRING THAT IS NOT TOO LONG"
+    print(string1, " is %d chars long" % len(string1))
+
+    # Try splitting only the first 3 words delimited by space
+    first_3_words = string1.split(" ", 3)
+    print("Split only first 3 words: %s" % first_3_words)
+
+    # Replace the spaces in the string with * using split/join
+    new_string_w_stars = "*".join(string1.split())
+    print("After split/joining with asterisk: %s" % new_string_w_stars)
+
+    # Do same as above but replace *'s for only first 3
+    new_string_w_3_stars = string1.replace(" ", "*", 3)
+    print("Replace first 3 spaces with asterisk: %s" % new_string_w_3_stars)
+
     print("Print last 3 digits of string...")
     s = "03_33_222"
     print("s = %s" % s, s[len(s)-3:])

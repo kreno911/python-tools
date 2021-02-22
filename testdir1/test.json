@@ -1,0 +1,13 @@
+{ "flights" : [
+{
+  "flight" : "SW1339",
+  "type"   : "heavy",
+  "departure_ap" : "PHL"
+},
+{
+  "flight" : "UA9992",
+  "type"   : "heavy",
+  "departure_ap" : "JFK"
+}
+] }
+
