@@ -1,4 +1,0 @@
-BASICS (Overall - all variations together)
-SUPPLIER,SUPPLIER-SKU,Descript,QUANTITY BOUGHT,PRICE,YEAR.[ASINS separated by |]
-SHEP,MAT-FPH22-964D,Mattel Barbie Mini Dresses,36,2.00,2019,[]
-SHEP,HAS-E4518-AS00,Ugly Dolls,82,5.72,2019,[]
