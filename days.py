@@ -7,8 +7,9 @@ import datetime
 numOfdays = 20
 # Generate dates: YYYY-MM-DD for some number of days
 for i in range(numOfdays):
-   theDate = datetime.date(2015,05,11) + datetime.timedelta(days=i)
-   print "Date = %s" % theDate
+   # Always use single digit, not 05 as 0# is interpreted as an octal 
+   theDate = datetime.date(2015,5,11) + datetime.timedelta(days=i)
+   print("Date = %s" % theDate)
 
-print "Start date was: 2015,05,11 for %d days" % numOfdays
+print("Start date was: 2015,5,11 for %d days" % numOfdays)
 
