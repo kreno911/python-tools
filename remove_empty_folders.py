@@ -30,7 +30,7 @@ def removeEmptyFolders(path):
                 os.rmdir(path)
 
 if len(sys.argv) != 2:
-    print "Need directory, could be '.'"
+    print("Need directory, could be '.'")
     sys.exit(11)
 keep = sys.argv[1]
 removeEmptyFolders(sys.argv[1])
