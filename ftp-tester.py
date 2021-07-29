@@ -12,9 +12,10 @@ import re
 site  = "ftp.ncep.noaa.gov"
 today = (datetime.utcnow() - timedelta(hours=8))
 today_str = today.strftime('%Y%m%d')
+print(today_str)
 
-#directory="/pub/data/nccf/com/hrrr/prod/hrrr."+today_str+"/conus"
-directory="/pub/data/nccf/com/hrrr/prod/hrrr.20210711/conus"
+directory="/pub/data/nccf/com/hrrr/prod/hrrr."+today_str+"/conus"
+#directory="/pub/data/nccf/com/hrrr/prod/hrrr.20210711/conus"
 ftp = FTP(site)
 ftp.login()             # Anonymous login
 ftp.cwd(directory)      # Change to a directory
