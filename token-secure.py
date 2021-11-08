@@ -1,19 +1,34 @@
 # Test out secure connections like those that use a certificate
 # Test out verify SSL flag
 
+# This particular test file goes out to the FAA GIS server to get its data
+
+'''
+The following will list object in the S3 prefix:
+    s3 = boto3.client("s3", region_name=os.environ['region'])
+
+    #for p in s3.list_objects(Bucket=os.environ['BUCKET'], Prefix=os.environ['EON_DATA_FILE'])['Contents']:
+    for key in s3.list_objects(Bucket=os.environ['BUCKET'], Prefix='eon/safety/raw/json/')['Contents']:
+        print(key['Key'])
+eon/safety/raw/json/
+eon/safety/raw/json/eon_data.json
+eon/safety/raw/json/response.json
+# Note it also lists the top level prefix...
+'''
 import json, sys
 import requests
 from datetime import datetime
 import ssl
 # Latest urllib for py3
-from urllib import request
-from urllib import parse
+from urllib import request, parse
+import csv
 
 # Disable the InsecureRequestWarning with verify=false
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 user = ""
+
 passw = ""
 use_prod = False
 # Only grab args, not script name
@@ -104,9 +119,19 @@ def get_data_with_requests_paging(token_url, data_url, offset):
     # resultRecordCount will only be as high as maxRecordCount (currently 3000)
     data_all_url = "%s/query?where=1%%3D1&f=pjson&outFields=*&resultRecordCount=5000&resultOffset=%d" \
                                         % (data_url,offset)
+    # Test for time range
+    # 1514764800000 = 1/1/2018 12 AM (UTC)
+    # 1546300800000 = 1/1/2019 12 AM (UTC)
+    # 1577836800000 = 1/1/2020 12 AM (UTC)
+    # 1614000000000 = 2/22/2021
+    # null for either value goes to infinity in that direction (b4 2009 - null,1230768000000)
+    # This one is all > 1/1/2018
+    data_all_url = "%s/query?where=1%%3D1&f=pjson&outFields=*&resultRecordCount=5000&resultOffset=%d&time=1614000000000,null" \
+                                        % (data_url,offset)
+
     ## (951 count - STL)
-    data_all_url = "%s/query?where=Location%%3D'STL'&f=pjson&outFields=*&resultRecordCount=3000&resultOffset=%d" \
-                   % (data_url, offset)
+    # data_all_url = "%s/query?where=Location%%3D'STL'&f=pjson&outFields=*&resultRecordCount=3000&resultOffset=%d" \
+    #             % (data_url, offset)
     ## Get ALL
     # data_all_url = "%s/query?where=1%%3D1&f=pjson&outFields=OBJECTID,Region,CreatedDateTime,EventDateTimeUtc&resultRecordCount=3000&resultOffset=%d" \
     #                % (data_url, offset)
@@ -117,16 +142,8 @@ def get_data_with_requests_paging(token_url, data_url, offset):
     response = requests.post(data_all_url, headers=headers, verify=False)
     eon_data = json.loads(response.text)
 
-    # When the limit is true, we have more to get, false, nothing left, return results.
-    # while limit_reached:
-    #     offset += 3000
-    #     data_all_url = "%s/query?where=1%%3D1&f=pjson&outFields=*&resultRecordCount=5000&resultOffset=%d" \
-    #                    % (data_url, offset)
-    #     response = requests.post(data_all_url, headers=headers, verify=False)
-    #     eon_data.update(json.loads(response.text))
-
     # Write to file
-    # with open("outout.out", 'w') as wr_file:
+    # with open("outout-raw.json", 'w') as wr_file:
     #     wr_file.write(response.text)
     return eon_data
 
@@ -156,25 +173,50 @@ def get_eon_data(token_url, data_url):
     #         break
     #     print("Value: %s" % value)
     # Write to file
-    with open("outout-prod.out", 'w') as wr_file:
-        for value in all_the_data:
-            wr_file.write(str(value) + '\n')
+    print("Writing to file:")
+    # with open("outout-temp.json", 'w') as wr_file:
+    #     for value in all_the_data:
+    #         #print(json.dumps(value))
+    #         wr_file.write(json.dumps(value) + '\n')
     print("Count = %d" % len(all_the_data))
 
-def get_data_with_urllib(token_url, data_url):
-    print("using urllib...", token_url)
-    ctx = ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode = ssl.CERT_NONE
-    data = {'username': '%s' % user, 'password': '%s' % passw,
-            'client': 'requestip', 'expiration': '60', 'f': 'pjson'}
-    # Must have the .encode("utf-8") or get "POST should be bytes" error
-    response = request.urlopen(token_url, data=parse.urlencode(data).encode("utf-8"), context=ctx)
-    tokens = json.loads(response.read())
-    the_token = tokens['token']
-    print("Token: %s" % the_token)
+    ##! DELETE WHEN DONE
+    # Break into yearly files
+    data_dict = {}
+    for jline in all_the_data:
+        #print(json.dumps(jline))
+        event_time = int(jline['EventDateTimeUtc'])
+        thedate = datetime.utcfromtimestamp(event_time / 1000.0)
+        year = thedate.strftime('%Y')
+        # Check if a dictionary of this year exists, if so, append to its list
+        # else, create new list and add to this yearly key
+        if year not in data_dict:
+            print("Adding: %s" % year)
+            data_dict[year] = []  # empty list to hold data
+        # Add data line
+        data_dict[year].append(jline)
+    file_name_format = "eon_data_%s.json"
+    for year in data_dict:
+        thefile = file_name_format % year
+        with open(thefile, "w") as outfile:
+            for line in data_dict[year]:
+                outfile.write(json.dumps(line) + '\n')
+    print("Done")
+    ##! DELETE
 
-    headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % the_token}
+'''
+If you get a response like: b'[-97,-97,-97,-97,-97]', this means its returning a byte string 
+urllib.request.urlopen() returns a bytestream
+'''
+def get_data_with_urllib(some_url):
+    print("Using urllib...", some_url)
+    data = "[{\"lat\":39.911798099999999,\"lon\":-105.111249000000001,\"timeStr\":\"20170805T180931\",\"prodId\":\"VIL\"}," \
+           "{\"lat\":39.911798099999999,\"lon\":-110.111249000000001,\"timeStr\":\"20170805T181131\",\"prodId\":\"VIL\"}]"
+    req = request.Request(some_url, data.encode('utf-8'))
+    req.add_header('Content-Type', 'application/json')
+    response = request.urlopen(req)
+    the_page = response.read().decode('utf-8')
+    print("Response: %s" % the_page)
 
 # Get a METAR file
 def get_metar_file():
@@ -182,8 +224,16 @@ def get_metar_file():
     file_text = request.urlopen(metar_file).read()
     return file_text
 
-get_eon_data(token_url, data_url)
-#get_data_with_urllib(token_url, data_url)
+#get_eon_data(token_url, data_url)
+get_data_with_urllib("http://10.22.169.14:8090/eim/proximityList")
+
+csv_string1 = "[-97,-97]"[1:-1]
+csv_string2 = "[44,55,66,77]"[1:-1]
+csv_list  = []
+csv_list.extend(csv_string1.split(","))
+csv_list.extend(csv_string2.split(","))
+for row in csv_list:
+    print(row)
 
 '''
 Saved code:
