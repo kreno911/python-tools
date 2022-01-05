@@ -62,6 +62,7 @@ vil_value = -1
 print("Length: ", len(x0), len(y0), x0[0], y0[0])  # -2559500.0 -1542500.0
 the_value = vil[0][0][2694][3531]
 print("Value at (3531,2694):", the_value, "With scale factor: %d" % (the_value/vil.scale_factor))
+# prints: Value at (3531,2694): 0.05371257667775506 With scale factor: 22
 # for ixx in range(len(x0)):
 #     for iyy in range(len(y0)):
 #         for value in vil[0][iyy][ixx]:
