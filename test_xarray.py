@@ -48,15 +48,19 @@ y_values = ds.coords['y0'].values
 time_values = ds.coords['time'].values
 vil_values = ds["VIL"]  # This is a DataArray
 
-# Use zip to work with the dimensions together (works only with two dimensions)
-# for x,y in zip(x_values, y_values):
-#     print("(%d, %d)" % (x, y))
 print ("Sizes: X: %d, Y: %d, T: %d" % (len(x_values),len(y_values),len(time_values)))
 # netCDF4 lib: print(vil[0][0][2694][3531]) => 0.05371257667775506 (22)
 the_value = vil_values[0][0][2694][3531].data
-print(type(the_value))
-print(the_value, the_value*vil_values.attrs["scale_factor"])
+print("Type: %s" % type(the_value), "({}, {})".format(x_values[3531], y_values[2694]))
+print("Scaled: %d, Unscaled: %.17f" % (the_value, the_value*vil_values.attrs["scale_factor"]))
 # Prints: 22 0.05371257667775506, this matches the same index using Netcdf lib
+
+# Try to dump all points with values
+# for xx in range(len(x_values)):
+#     for yy in range(len(y_values)):
+#         the_value = vil_values[0][0][yy][xx].data
+#         if the_value > 0.0:
+#             print(the_value, xx, yy)
 
 # file: "/TEST_DATA/WX/ciws/VIL/2019/0202/20190202_v_024230_l_0000000.nc"
 
