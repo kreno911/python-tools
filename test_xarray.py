@@ -55,12 +55,16 @@ print("Type: %s" % type(the_value), "({}, {})".format(x_values[3531], y_values[2
 print("Scaled: %d, Unscaled: %.17f" % (the_value, the_value*vil_values.attrs["scale_factor"]))
 # Prints: 22 0.05371257667775506, this matches the same index using Netcdf lib
 
+OUTFILE = "/TEST_DATA/OUTPUT/netcdf_vil_dump.csv"
+afile = open(OUTFILE, "w")
+
 # Try to dump all points with values
-# for xx in range(len(x_values)):
-#     for yy in range(len(y_values)):
-#         the_value = vil_values[0][0][yy][xx].data
-#         if the_value > 0.0:
-#             print(the_value, xx, yy)
+for xx in range(len(x_values)):
+    for yy in range(len(y_values)):
+        the_value = vil_values[0][0][yy][xx].data
+        if the_value > 0.0:
+            afile.write("%d,%.17f,%.17f" % (the_value, x_values[xx], y_values[yy])+"\n")
+            afile.flush()
 
 # file: "/TEST_DATA/WX/ciws/VIL/2019/0202/20190202_v_024230_l_0000000.nc"
 
