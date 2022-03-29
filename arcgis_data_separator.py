@@ -2,7 +2,7 @@
 # This file will take the JSON data from token-secure.py and separate all data into
 # yearly files like 2018-data.json, 2019-data.json...
 #
-# The data comes from the ARGIS server on local FAA network.
+# The data comes from the ARGIS server on local network.
 #   See outout-temp.out to see the input file and see eon_data_YYYY.json for output.
 #####
 
@@ -20,6 +20,13 @@ load()	Decode while JSON file read
 #   1) Read file in
 #   2) Pick out stanzas by year
 #   3) Store data into yearly files
+
+'''
+Sample line from outout-temp.out
+{"OBJECTID": 32625, "Region": "ACE", "ReportingLevel": 2, "DisplayUrl": "URL:// test.com/eon/app/Lists/DRA/EditFormChangedToNewform.aspx?ID=32625", "Summary": "STL: EGF3692, E145, GRR-DFW, DECLARED AN EMERGENCY AND DIVERTED TO STL, DUE TO MEDICAL EMERGENCY, A SICK PASSENGER. ACFT LANDED AT 2221Z WITHOUT INCIDENT. 3/4 2221Z", "EventDateTimeUtc": 1236205260000, "EventDateTimeLocal": 1236183660000, "AircraftType": "E145", "ReportingFacility": "ZKC/KIM", "Location": "STL", "EventType": "Medical Emergency", "CreatedDateTime": 1236208884000, "ModifiedDateTime": 1236208884000, "Longitude": -90.37002889, "Latitude": 38.74869722, "EventUtcOffset": null, "EventTimeZoneCity": null, "Tags": null, "Airline": null, "CallSign": null, "NNumber": null, "DepartureAirport": null, "ArrivalAirport": null, "DivertedTo": null, "Pob": null, "InjuryType": null, "InjuriesMinor": null, "InjuriesSerious": null, "Fatalities": null, "DamageType": null, "Uninjured": null, "UnknownInjured": null, "PobUnknown": null, "LastUpdateDate": null, "City": null, "State": null, "Title": null, "Airport": null}
+...
+...
+'''
 
 start_time = datetime.now()
 print("Start...(%s)" % datetime.now())
