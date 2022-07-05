@@ -35,11 +35,20 @@ def handle_small_parquet():
     # Write out the lat/longs to a file in CSV (no header row, no index)
     df.to_csv('/TEST_DATA/OUTPUT/lat-longs.csv', columns=["flightState_location_latitude","flightState_location_longitude"],header=False,index=False)
 def basics():
+    # To make sure ALL columms are printed
+    pd.set_option('display.max_columns', None)
+    # Other options to add to read_*
+    #    delimuter="\t"  (tab) - check docs for others
+    #    
     # Create sample dataframe
     df = pd.DataFrame({'numbers': [1, 2, 3],
                        'colors': ['red', 'white', 'blue'],
                        'vil': [float("NaN"), float("nan"), float("nan")]},
                       columns=['numbers', 'colors', 'vil'])
+    # print columns only
+    print(df.columns)
+    # Print a few columns
+    print(df[['colors','vil']])
     print(df)
     vil_updates = [44, 55, 66]
     # Assign values to whole column 
@@ -47,7 +56,8 @@ def basics():
     print(df)
     
     df = pd.DataFrame(np.random.rand(4, 8))
-    print(df)
+    # Print first 5 
+    print(df.head(5))
     '''
     prints the following
               0         1         2         3         4         5         6         7
