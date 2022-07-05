@@ -35,15 +35,33 @@ def handle_small_parquet():
     # Write out the lat/longs to a file in CSV (no header row, no index)
     df.to_csv('/TEST_DATA/OUTPUT/lat-longs.csv', columns=["flightState_location_latitude","flightState_location_longitude"],header=False,index=False)
 def basics():
-    # Example dataframe
+    # Create sample dataframe
     df = pd.DataFrame({'numbers': [1, 2, 3],
                        'colors': ['red', 'white', 'blue'],
                        'vil': [float("NaN"), float("nan"), float("nan")]},
                       columns=['numbers', 'colors', 'vil'])
     print(df)
     vil_updates = [44, 55, 66]
+    # Assign values to whole column 
     df['vil'] = vil_updates
     print(df)
+    
+    df = pd.DataFrame(np.random.rand(4, 8))
+    print(df)
+    '''
+    prints the following
+              0         1         2         3         4         5         6         7
+    0  0.523416  0.459015  0.861435  0.237601  0.013846  0.071018  0.273127  0.872113
+    1  0.717681  0.322752  0.857043  0.355224  0.747973  0.724821  0.234605  0.850687
+    2  0.945175  0.177572  0.899477  0.108231  0.477513  0.800410  0.963119  0.795947
+    3  0.470568  0.381467  0.066612  0.912329  0.072366  0.334874  0.161733  0.674814
+    '''
+    ntsb_file = "ntsb_events.csv"
+    # Copied this from Hue (postgres) CSV windows to unix and got: invalid continuation byte
+    # Used ISO-8859-1 encoding to get to work.
+    ntsb_df = pd.read_csv(ntsb_file, encoding="ISO-8859-1")
+    print(ntsb_df)
+
 
     def get_random_list_of_ints(size):
         return [random.randrange(1, 50, 1) for i in range(size)]
