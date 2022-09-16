@@ -45,6 +45,9 @@ def basics():
                        'colors': ['red', 'white', 'blue'],
                        'vil': [float("NaN"), float("nan"), float("nan")]},
                       columns=['numbers', 'colors', 'vil'])
+    # print number of columns/rows
+    print("Number of columns %d" % len(df.columns))
+    print("Number of rows %d" % len(df.index))
     # print columns only
     print(df.columns)
     # Print a few columns
