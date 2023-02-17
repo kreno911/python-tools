@@ -1,0 +1,8 @@
+pip install fastapi
+pip install uvicorn
+pip install requests
+pip install mangum
+pip install pytest
+# These were needed for pytest
+pip install httpx
+pip install curio
